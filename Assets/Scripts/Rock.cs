@@ -6,7 +6,7 @@ public class Rock : MonoBehaviour
     {
         if(transform.position.y < -5)
         {
-            LevelManager.Instance.AddRock();
+            EventBus.OnRockReachedEnd?.Invoke();
             gameObject.SetActive(false);
         }
     }

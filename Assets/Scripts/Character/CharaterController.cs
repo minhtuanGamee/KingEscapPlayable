@@ -19,7 +19,15 @@ public class CharacterController : MonoBehaviour
         PlayAnimation("push", 0,true);
         UpdateCharacterSkin();
     }
+    private void OnEnable()
+    {
+        EventBus.OnEndGame += CharacterEndGame;
+    }
 
+    private void OnDisable()
+    {
+        EventBus.OnEndGame -= CharacterEndGame;
+    }
     public void PlayAnimation(string name, int indexTrack, bool loop, Action<Spine.Event> onEvent = null, Action onComplete = null)
     {
         var anim = skeleton.AnimationState.SetAnimation(0, name, loop);
@@ -36,8 +44,6 @@ public class CharacterController : MonoBehaviour
             anim.Complete += _ => onComplete();
         }
     }
-
-
     public void UpdateCharacterSkin()
     {
         var skeletonData = skeleton.Skeleton.Data;
@@ -67,5 +73,18 @@ public class CharacterController : MonoBehaviour
 
         // Cập nhật animation ngay
         skeleton.LateUpdate();
+    }
+    private void CharacterEndGame(bool isWin)
+    {
+        showWeapon = false;
+        UpdateCharacterSkin();
+        if (isWin)
+        {
+            PlayAnimation("win", 0, true);
+        }
+        else
+        {
+            PlayAnimation("lose", 0, false);
+        }
     }
 }

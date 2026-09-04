@@ -106,6 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6bb4786b48293d4b941bbd000343931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tile
+  scaleUpDuration: 0.1
+  scaleDownDuration: 0.1
+  scaleUp: 1.5
 --- !u!61 &3500193625995081582
 BoxCollider2D:
   m_ObjectHideFlags: 0

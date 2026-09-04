@@ -13,19 +13,28 @@ public class LevelManager : MonoBehaviour
     private GameState gameState;
 
     public float CurrentTime => LevelTime;
+
     public int CurrentRockCount => RockCount;
 
     private void Awake()
     {
         Instance = this;
     }
+    private void OnEnable()
+    {
+        EventBus.OnRockReachedEnd += AddRock;
+    }
 
+    private void OnDisable()
+    {
+        EventBus.OnRockReachedEnd -= AddRock;
+    }
     private void Start()
     {
         gameState = GameState.Play;
 
         // Khởi tạo UI thông qua UIManager
-        UIManager.Instance.Init(RockLimit, LevelTime);
+        //UIManager.Instance.Init(RockLimit, LevelTime);
     }
 
     private void Update()
@@ -34,9 +43,7 @@ public class LevelManager : MonoBehaviour
             return;
 
         LevelTime -= Time.deltaTime;
-
-        // Cập nhật timing UI
-        UIManager.Instance.UpdateTime(LevelTime);
+        EventBus.OnTimeChanged?.Invoke(Mathf.Max(0, LevelTime));
 
         if (LevelTime <= 0f)
         {
@@ -53,8 +60,7 @@ public class LevelManager : MonoBehaviour
         RockCount++;
         
         // Cập nhật Slider
-        UIManager.Instance.UpdateRock(RockCount);
-
+        EventBus.OnRockCountChanged?.Invoke(RockCount);
         // Dùng >= để đủ RockLimit là thắng
         if (RockCount >= RockLimit)
         {
@@ -68,10 +74,7 @@ public class LevelManager : MonoBehaviour
             return;
 
         gameState = GameState.End;
-        UIManager.Instance.Show(false);
-        characterController.showWeapon = false;
-        characterController.UpdateCharacterSkin();
-        characterController.PlayAnimation("lose_prone",0,false);
+        EventBus.OnEndGame?.Invoke(false);
     }
 
     public void Win()
@@ -80,10 +83,7 @@ public class LevelManager : MonoBehaviour
             return;
 
         gameState = GameState.End;
-        UIManager.Instance.Show(true);
-        characterController.showWeapon = false;
-        characterController.UpdateCharacterSkin();
-        characterController.PlayAnimation("win",0,true);
+        EventBus.OnEndGame?.Invoke(true);
     }
 }
 
