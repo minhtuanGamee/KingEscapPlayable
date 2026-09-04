@@ -40,9 +40,10 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 
     public void OnSetUp()
     {
+        isClicked = false;
         transform.DOKill();
         Sequence sequence = DOTween.Sequence();
-
+        
         sequence.Append(
              transform.DOScale(originalScale * scaleUp, scaleUpDuration)
         );

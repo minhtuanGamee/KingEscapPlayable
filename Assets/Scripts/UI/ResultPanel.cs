@@ -9,11 +9,13 @@ public class ResultUIView : UIView
     private void OnEnable()
     {
         EventBus.OnEndGame += ShowEndGame;
+        EventBus.ResetGame += Hide;
     }
 
     private void OnDisable()
     {
         EventBus.OnEndGame -= ShowEndGame;
+        EventBus.ResetGame -= Hide;
     }
 
     public void ShowEndGame(bool isWin)

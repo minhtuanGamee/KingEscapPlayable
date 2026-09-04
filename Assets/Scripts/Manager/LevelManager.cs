@@ -7,8 +7,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private float LevelTime = 15f;
     [SerializeField] private int RockCount = 0;
-    public int RockLimit = 10;
-    [SerializeField] private CharacterController characterController;
+    public int RockLimit = 5;
 
     private GameState gameState;
 
@@ -29,7 +28,7 @@ public class LevelManager : MonoBehaviour
     private void OnDisable()
     {
         EventBus.OnRockReachedEnd -= AddRock;
-        EventBus.ResetGame += ResetLevel;
+        EventBus.ResetGame -= ResetLevel;
     
 
     }
@@ -71,7 +70,6 @@ public class LevelManager : MonoBehaviour
             Win();
         }
     }
-
     public void Lose()
     {
         if (gameState == GameState.End)
@@ -89,10 +87,11 @@ public class LevelManager : MonoBehaviour
         gameState = GameState.End;
         EventBus.OnEndGame?.Invoke(true);
     }
-
     private void ResetLevel()
     {
-
+        RockCount = 0;
+        LevelTime = 15f;
+        gameState = GameState.Play;
     }
 }
 

@@ -14,19 +14,27 @@ public class CharacterController : MonoBehaviour
     public bool showWeapon = false;
     [SerializeField] private AudioSource audioSource;
     public AudioClip hitClip;
+
     private void Start()
     {
-        PlayAnimation("push", 0,true);
+        SetUpCharacter();
+    }
+    private void SetUpCharacter()
+    {
+        showWeapon = true;
+        PlayAnimation("push", 0, true);
         UpdateCharacterSkin();
     }
     private void OnEnable()
     {
         EventBus.OnEndGame += CharacterEndGame;
+        EventBus.ResetGame += SetUpCharacter;
     }
 
     private void OnDisable()
     {
         EventBus.OnEndGame -= CharacterEndGame;
+        EventBus.ResetGame -= SetUpCharacter;
     }
     public void PlayAnimation(string name, int indexTrack, bool loop, Action<Spine.Event> onEvent = null, Action onComplete = null)
     {

@@ -17,6 +17,7 @@ public class GameView : UIView
         EventBus.OnRockCountChanged += UpdateRock;
         EventBus.OnTimeChanged += UpdateTime;
         EventBus.OnEndGame += EndView;
+        EventBus.ResetGame += Show;
     }
 
     private void OnDisable()
@@ -24,6 +25,7 @@ public class GameView : UIView
         EventBus.OnRockCountChanged -= UpdateRock;
         EventBus.OnTimeChanged -= UpdateTime;
         EventBus.OnEndGame -= EndView;
+        EventBus.ResetGame -= Show;
     }
     protected override void Start()
     {
