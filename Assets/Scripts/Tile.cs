@@ -20,7 +20,6 @@ public class Tile : MonoBehaviour, IPointerClickHandler
             return;
         OnClick();
     }
-
     public void OnClick()
     {
         isClicked = true;
@@ -39,4 +38,16 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         });
     }
 
+    public void OnSetUp()
+    {
+        transform.DOKill();
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.Append(
+             transform.DOScale(originalScale * scaleUp, scaleUpDuration)
+        );
+        sequence.Append(
+            transform.DOScale(originalScale * 0.9f, scaleDownDuration)
+        );
+    }
 }

@@ -23,16 +23,20 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.OnRockReachedEnd += AddRock;
+        EventBus.ResetGame += ResetLevel;
     }
 
     private void OnDisable()
     {
         EventBus.OnRockReachedEnd -= AddRock;
+        EventBus.ResetGame += ResetLevel;
+    
+
     }
     private void Start()
     {
         gameState = GameState.Play;
-
+        EventBus.OnRockCountChanged?.Invoke(RockCount);
         // Khởi tạo UI thông qua UIManager
         //UIManager.Instance.Init(RockLimit, LevelTime);
     }
@@ -84,6 +88,11 @@ public class LevelManager : MonoBehaviour
 
         gameState = GameState.End;
         EventBus.OnEndGame?.Invoke(true);
+    }
+
+    private void ResetLevel()
+    {
+
     }
 }
 

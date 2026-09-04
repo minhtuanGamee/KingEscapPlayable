@@ -1,9 +1,10 @@
 using TMPro;
+using TuanBowFramework.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameView : MonoBehaviour
+public class GameView : UIView
 {
 
     [Header("Gameplay UI")]
@@ -11,24 +12,26 @@ public class GameView : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI rockText;
     [SerializeField] private TextMeshProUGUI timeText;
 
-    [Header("Result UI")]
-    public ResultUIView totalPanel;
-
-
     private void OnEnable()
     {
         EventBus.OnRockCountChanged += UpdateRock;
-        EventBus.OnEndGame += ShowEndGame;
         EventBus.OnTimeChanged += UpdateTime;
+        EventBus.OnEndGame += EndView;
     }
 
     private void OnDisable()
     {
         EventBus.OnRockCountChanged -= UpdateRock;
-        EventBus.OnEndGame -= ShowEndGame;
         EventBus.OnTimeChanged -= UpdateTime;
+        EventBus.OnEndGame -= EndView;
     }
-    public void Init(int rockLimit, float levelTime)
+    protected override void Start()
+    {
+        base.Start();
+
+        Init(LevelManager.Instance.RockLimit);
+    }
+    public void Init(int rockLimit)
     {
         // Rock Slider
         rockSlider.minValue = 0;
@@ -37,8 +40,6 @@ public class GameView : MonoBehaviour
 
         UpdateRockText(0, rockLimit);
 
-        // Timer
-        UpdateTime(levelTime);
     }
 
     public void UpdateRock(int currentRock)
@@ -65,24 +66,9 @@ public class GameView : MonoBehaviour
         // timeText.text = "00:" + seconds.ToString("00");
     }
 
-    public void ShowEndGame(bool isWin)
+    public void EndView(bool isWin)
     {
-        totalPanel.gameObject.SetActive(true);
-
-        if (isWin)
-        {
-            totalPanel.text.text = "Win";
-        }
-        else
-        {
-            totalPanel.text.text = "Lose";
-        }
-    }
-
-    public void LoadingScene()
-    {
-        Debug.Log("Click");
-        SceneManager.LoadScene("GamePlay");
+        Hide();
     }
 }
 

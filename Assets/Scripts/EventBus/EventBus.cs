@@ -8,4 +8,5 @@ public static class EventBus
     public static Action<int> OnRockCountChanged;
     public static Action<float> OnTimeChanged;
     public static Action<bool> OnEndGame;
+    public static Action ResetGame;
 }
